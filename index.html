@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Bài tập HTML</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+        }
+
+        header {
+            background: #1769aa;
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        header h1 {
+            margin-top: 0;
+        }
+
+        nav {
+            background: #104d80;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background: #287fbd;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #00000015;
+        }
+
+        h2 {
+            color: #1769aa;
+        }
+
+        .bai-tap {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .bai-tap a {
+            display: block;
+            background: #e5f2ff;
+            color: #104d80;
+            text-decoration: none;
+            text-align: center;
+            padding: 25px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #c5e1fa;
+        }
+
+        .bai-tap a:hover {
+            background: #cce5ff;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: #104d80;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .bai-tap {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>WEBSITE BÀI TẬP HTML</h1>
+        <p>Thực hành HTML, CSS và JavaScript</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="bt1.html">Bài tập 1</a>
+        <a href="BT02.HTML">Bài tập 2</a>
+        <a href="BT3.html">Bài tập 3</a>
+    </nav>
+
+    <main>
+        <section class="card">
+            <h2>Giới thiệu</h2>
+            <p>
+                Chào mừng đến với website bài tập thực hành HTML,
+                CSS và JavaScript.
+            </p>
+            <p>
+                Trang web gồm ba bài tập. Bạn có thể nhấn vào từng bài
+                để xem nội dung và kết quả thực hiện.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Danh sách bài tập</h2>
+
+            <div class="bai-tap">
+                <a href="bt1.html">
+                    BÀI TẬP 1
+                    <p>Nhấn để xem bài 1</p>
+                </a>
+
+                <a href="BT02.HTML">
+                    BÀI TẬP 2
+                    <p>Nhấn để xem bài 2</p>
+                </a>
+
+                <a href="BT3.html">
+                    BÀI TẬP 3
+                    <p>Đồng hồ đếm ngược</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Website bài tập thực hành HTML, CSS và JavaScript</p>
+    </footer>
+
+</body>
+</html>
