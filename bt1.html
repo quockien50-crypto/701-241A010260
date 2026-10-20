@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách sản phẩm</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f2f4f8;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2346a0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #2346a0;
+            color: white;
+            cursor: pointer;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .product {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px #ccc;
+        }
+
+        .price {
+            color: #d62828;
+            font-weight: bold;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Danh sách sản phẩm</h1>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="keyword"
+            placeholder="Nhập tên sản phẩm..."
+        >
+        <button id="searchBtn">Tìm kiếm</button>
+    </div>
+
+    <p id="message"></p>
+    <div id="products" class="products"></div>
+
+    <script>
+        // Bước 1: Tạo mảng dữ liệu sản phẩm
+        const products = [
+            { name: "Laptop", price: 15000000 },
+            { name: "Điện thoại", price: 8000000 },
+            { name: "Tai nghe", price: 500000 },
+            { name: "Bàn phím", price: 700000 },
+            { name: "Chuột máy tính", price: 300000 }
+        ];
+
+        // Bước 2: Lấy các phần tử HTML
+        const keywordInput = document.getElementById("keyword");
+        const searchBtn = document.getElementById("searchBtn");
+        const productList = document.getElementById("products");
+        const message = document.getElementById("message");
+
+        // Bước 3: Hiển thị danh sách sản phẩm
+        function displayProducts(list) {
+            productList.replaceChildren();
+
+            list.forEach(function(product) {
+                const card = document.createElement("div");
+                card.className = "product";
+
+                const name = document.createElement("h3");
+                name.textContent = product.name;
+
+                const price = document.createElement("p");
+                price.className = "price";
+                price.textContent =
+                    product.price.toLocaleString("vi-VN") + " VNĐ";
+
+                card.append(name, price);
+                productList.appendChild(card);
+            });
+        }
+
+        // Bước 4: Xử lý chức năng tìm kiếm
+        function searchProducts() {
+            const keyword = keywordInput.value
+                .trim()
+                .toLocaleLowerCase("vi");
+
+            const result = products.filter(function(product) {
+                return product.name
+                    .toLocaleLowerCase("vi")
+                    .includes(keyword);
+            });
+
+            displayProducts(result);
+
+            if (result.length === 0) {
+                message.textContent = "Không tìm thấy sản phẩm!";
+                message.style.color = "red";
+            } else {
+                message.textContent =
+                    "Tìm thấy " + result.length + " sản phẩm.";
+                message.style.color = "green";
+            }
+        }
+
+        // Bước 5: Gắn sự kiện click
+        searchBtn.addEventListener("click", searchProducts);
+
+        // Nhấn Enter cũng tìm kiếm
+        keywordInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                searchProducts();
+            }
+        });
+
+        // Bước 6: Hiển thị tất cả sản phẩm khi mở trang
+        displayProducts(products);
+    </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3 - Đồng hồ đếm ngược</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef3f8;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #00000020;
+        }
+
+        h1 {
+            color: #1769aa;
+        }
+
+        #timer {
+            font-size: clamp(50px, 12vw, 75px);
+            font-weight: bold;
+            color: #1769aa;
+            margin: 25px 0;
+        }
+
+        #timer.warning {
+            color: red;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: white;
+            background: #1769aa;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #reset {
+            background: #616161;
+        }
+
+        #status {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        dialog {
+            border: none;
+            border-radius: 12px;
+            padding: 25px;
+            width: min(90%, 350px);
+            text-align: center;
+            box-shadow: 0 5px 20px #00000040;
+        }
+
+        dialog::backdrop {
+            background: #00000070;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>ĐỒNG HỒ ĐẾM NGƯỢC</h1>
+        <p>Thời gian ban đầu: 10 phút</p>
+
+        <div id="timer">10:00</div>
+
+        <div class="buttons">
+            <button id="start">Bắt đầu</button>
+            <button id="pause">Tạm dừng</button>
+            <button id="reset">Đặt lại</button>
+        </div>
+
+        <p id="status">Sẵn sàng bắt đầu!</p>
+
+        <dialog id="alertModal">
+            <h2>Hết thời gian!</h2>
+            <p>Đồng hồ đếm ngược đã kết thúc.</p>
+            <button id="closeModal">Đóng</button>
+        </dialog>
+    </div>
+
+    <script>
+        const timer = document.getElementById("timer");
+        const startBtn = document.getElementById("start");
+        const pauseBtn = document.getElementById("pause");
+        const resetBtn = document.getElementById("reset");
+        const statusText = document.getElementById("status");
+        const alertModal = document.getElementById("alertModal");
+        const closeModal = document.getElementById("closeModal");
+
+        const INITIAL_TIME = 10 * 60;
+
+        let remainingSeconds = INITIAL_TIME;
+        let intervalId = null;
+        let endTime = 0;
+
+        // Hiển thị thời gian MM:SS
+        function displayTime() {
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+
+            timer.textContent =
+                String(minutes).padStart(2, "0") + ":" +
+                String(seconds).padStart(2, "0");
+
+            // Nhấp nháy khi còn dưới 1 phút
+            timer.classList.toggle(
+                "warning",
+                remainingSeconds > 0 && remainingSeconds < 60
+            );
+        }
+
+        // Dừng interval để tránh chạy nhiều bộ đếm
+        function stopInterval() {
+            if (intervalId !== null) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        // Xử lý khi hết giờ
+        function finishTimer() {
+            stopInterval();
+            remainingSeconds = 0;
+            displayTime();
+
+            statusText.textContent = "Đã hết thời gian!";
+
+            if (!alertModal.open) {
+                alertModal.showModal();
+            }
+        }
+
+        // Cập nhật thời gian
+        function updateTimer() {
+            remainingSeconds = Math.max(
+                0,
+                Math.ceil((endTime - Date.now()) / 1000)
+            );
+
+            displayTime();
+
+            if (remainingSeconds <= 0) {
+                finishTimer();
+            }
+        }
+
+        // Bắt đầu đếm ngược
+        function startTimer() {
+            if (intervalId !== null || remainingSeconds <= 0) {
+                return;
+            }
+
+            endTime = Date.now() + remainingSeconds * 1000;
+
+            statusText.textContent = "Đồng hồ đang chạy.";
+
+            updateTimer();
+
+            if (remainingSeconds > 0) {
+                intervalId = setInterval(updateTimer, 250);
+            }
+        }
+
+        // Tạm dừng đồng hồ
+        function pauseTimer() {
+            if (intervalId === null) {
+                return;
+            }
+
+            updateTimer();
+
+            if (intervalId !== null) {
+                stopInterval();
+                statusText.textContent = "Đồng hồ đã tạm dừng.";
+            }
+        }
+
+        // Đặt lại 10 phút
+        function resetTimer() {
+            stopInterval();
+
+            remainingSeconds = INITIAL_TIME;
+            endTime = 0;
+
+            displayTime();
+
+            statusText.textContent = "Đã đặt lại về 10 phút.";
+
+            if (alertModal.open) {
+                alertModal.close();
+            }
+        }
+
+        // Đăng ký sự kiện cho các nút
+        startBtn.addEventListener("click", startTimer);
+        pauseBtn.addEventListener("click", pauseTimer);
+        resetBtn.addEventListener("click", resetTimer);
+
+        closeModal.addEventListener("click", function () {
+            alertModal.close();
+        });
+
+        // Hiển thị thời gian ban đầu
+        displayTime();
+    </script>
+</body>
+</html>

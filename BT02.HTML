@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form đăng ký</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #0002;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2563eb;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #thongBao {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .loi {
+            color: #dc2626;
+        }
+
+        .thanhCong {
+            color: #15803d;
+        }
+
+        .taiKhoan {
+            margin-top: 20px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Đăng ký tài khoản</h2>
+
+    <form id="formDangKy">
+        <label for="hoTen">Họ và tên</label>
+        <input type="text" id="hoTen" placeholder="Nhập họ tên">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="example@gmail.com">
+
+        <label for="matKhau">Mật khẩu</label>
+        <input type="password" id="matKhau" placeholder="Ít nhất 6 ký tự">
+
+        <label for="xacNhan">Xác nhận mật khẩu</label>
+        <input type="password" id="xacNhan" placeholder="Nhập lại mật khẩu">
+
+        <button type="submit">Đăng ký</button>
+    </form>
+
+    <p id="thongBao" role="status"></p>
+
+    <h3>Tài khoản đã đăng ký</h3>
+    <div id="danhSach"></div>
+</div>
+
+<script>
+    const form = document.getElementById("formDangKy");
+    const thongBao = document.getElementById("thongBao");
+    const danhSach = document.getElementById("danhSach");
+
+    function hienThiTaiKhoan() {
+        danhSach.replaceChildren();
+
+        const taiKhoan =
+            JSON.parse(localStorage.getItem("taiKhoanDangKy")) || [];
+
+        if (taiKhoan.length === 0) {
+            danhSach.textContent = "Chưa có tài khoản nào.";
+            return;
+        }
+
+        taiKhoan.forEach(function (nguoiDung) {
+            const item = document.createElement("div");
+            item.className = "taiKhoan";
+
+            const ten = document.createElement("p");
+            ten.textContent = "Họ tên: " + nguoiDung.hoTen;
+
+            const email = document.createElement("p");
+            email.textContent = "Email: " + nguoiDung.email;
+
+            item.append(ten, email);
+            danhSach.appendChild(item);
+        });
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const hoTen = document.getElementById("hoTen").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const matKhau = document.getElementById("matKhau").value;
+        const xacNhan = document.getElementById("xacNhan").value;
+
+        if (!hoTen || !email || !matKhau || !xacNhan) {
+            thongBao.textContent = "Vui lòng nhập đầy đủ thông tin.";
+            thongBao.className = "loi";
+            return;
+        }
+
+        if (matKhau.length < 6) {
+            thongBao.textContent = "Mật khẩu phải có ít nhất 6 ký tự.";
+            thongBao.className = "loi";
+            return;
+        }
+
+        if (matKhau !== xacNhan) {
+            thongBao.textContent = "Mật khẩu xác nhận không khớp.";
+            thongBao.className = "loi";
+            return;
+        }
+
+        const taiKhoan =
+            JSON.parse(localStorage.getItem("taiKhoanDangKy")) || [];
+
+        const emailTonTai = taiKhoan.some(function (nguoiDung) {
+            return nguoiDung.email.toLowerCase() === email.toLowerCase();
+        });
+
+        if (emailTonTai) {
+            thongBao.textContent = "Email này đã được đăng ký.";
+            thongBao.className = "loi";
+            return;
+        }
+
+        taiKhoan.push({ hoTen: hoTen, email: email });
+
+        localStorage.setItem(
+            "taiKhoanDangKy",
+            JSON.stringify(taiKhoan)
+        );
+
+        thongBao.textContent = "Đăng ký thành công!";
+        thongBao.className = "thanhCong";
+
+        form.reset();
+        hienThiTaiKhoan();
+    });
+
+    hienThiTaiKhoan();
+</script>
+
+</body>
+</html>
