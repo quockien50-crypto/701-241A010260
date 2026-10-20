@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trả lời lý thuyết</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>PHẦN TRẢ LỜI LÝ THUYẾT</h1>
+        <a href="index.html">Về trang chủ</a>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Câu 1: So sánh position relative và absolute</h2>
+            <p><b>position: relative</b> giữ vị trí ban đầu của phần tử trong bố cục. Có thể dùng top, right, bottom, left để dịch chuyển phần tử so với vị trí ban đầu.</p>
+            <p><b>position: absolute</b> đưa phần tử ra khỏi luồng bố cục thông thường và định vị theo phần tử tổ tiên gần nhất có position khác static.</p>
+            <p>Ví dụ: relative dùng để tạo khung chứa; absolute dùng để đặt biểu tượng ở góc ảnh. Khi responsive, cần kết hợp phần trăm, Flexbox hoặc Grid để giao diện phù hợp nhiều màn hình.</p>
+            <p>Hosting không làm thay đổi cách hai thuộc tính hoạt động. Tuy nhiên, bố cục cố định có thể bị lệch trên điện thoại nếu không thiết kế responsive.</p>
+        </section>
+
+        <section class="card">
+            <h2>Câu 2: Domain, Hosting và DNS</h2>
+            <p>Domain là tên miền của website; hosting là nơi lưu trữ các file website. DNS chuyển tên miền thành địa chỉ máy chủ tương ứng để trình duyệt tìm đến website.</p>
+            <p>Quy trình: đăng ký tên miền nếu cần, chọn hosting, tải code lên hosting, cấu hình domain/DNS và kiểm tra website.</p>
+            <p>Có thể dùng GitHub Pages hoặc Netlify để triển khai website HTML, CSS, JavaScript tĩnh mà không cần thuê máy chủ riêng.</p>
+            <p>Rủi ro bảo mật gồm để lộ khóa bí mật trong JavaScript, không dùng HTTPS, hoặc lưu dữ liệu nhạy cảm ở nơi công khai. Không đưa mật khẩu thật hay API key bí mật vào code phía trình duyệt.</p>
+        </section>
+
+        <section class="card">
+            <h2>Câu 3: So sánh var, let và const</h2>
+            <p><b>var:</b> có phạm vi hàm, được hoisting và khởi tạo giá trị undefined.</p>
+            <p><b>let:</b> có phạm vi khối lệnh, được hoisting nhưng không thể sử dụng trước khi khai báo do Temporal Dead Zone.</p>
+            <p><b>const:</b> có phạm vi khối lệnh như let, bắt buộc gán giá trị khi khai báo và không thể gán lại biến.</p>
+            <pre><code>console.log(a); // undefined
+var a = 10;
+
+// console.log(b); // ReferenceError
+let b = 20;
+
+const c = 30;
+// c = 40; // TypeError</code></pre>
+            <p>Để debug, mở Chrome DevTools bằng F12, chọn Console xem lỗi, hoặc Sources đặt breakpoint và kiểm tra giá trị biến.</p>
+        </section>
+
+        <section class="card">
+            <h2>Câu 4: Event Delegation</h2>
+            <p>Event Delegation là kỹ thuật gắn một trình xử lý sự kiện lên phần tử cha để xử lý sự kiện phát sinh từ các phần tử con.</p>
+            <pre><code>document.querySelector("#danhSach")
+.addEventListener("click", function(event) {
+    if (event.target.matches("button.xoa")) {
+        event.target.closest("li").remove();
+    }
+});</code></pre>
+            <p>Ví dụ trên cho phép xóa các mục trong danh sách bằng nút có class xoa. Cách này hữu ích với danh sách động vì không cần gắn sự kiện riêng cho từng nút. Có thể kết hợp CSS để tạo hiệu ứng hover và giao diện dễ sử dụng.</p>
+        </section>
+    </main>
+</body>
+</html>
